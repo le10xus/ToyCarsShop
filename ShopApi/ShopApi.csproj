@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\ToyCarsShop.Domain.Core\ToyCarsShop.Domain.Core.csproj" />
+    <ProjectReference Include="..\Domain\ToyCarsShop.Domain.Interface\ToyCarsShop.Domain.Interface.csproj" />
+    <ProjectReference Include="..\Infrastructure\ToyCarsShop.Infrastructure.Data\ToyCarsShop.Infrastructure.Data.csproj" />
+  </ItemGroup>
+
+</Project>
