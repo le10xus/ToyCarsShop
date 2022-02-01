@@ -2,11 +2,13 @@
     <div>
         Get Car data in component:
         <button 
-            :click="getCars">
+            v-on:click="getCars">
             Get cars
         </button>
-        <div v-for="car in cars">
-            <CarCard carData="car"/>
+        <div class="cardsTable">
+            <div v-for="car in cars">
+                <CarCard :car-data="car" />
+            </div>
         </div>
     </div>
 </template>
@@ -26,7 +28,6 @@
         },
         methods: {
             getCars: function () {
-                debugger;
                 axios
                     .get('https://localhost:44357/api/Cars')
                     .then(response => { this.cars = response.data });
@@ -34,3 +35,8 @@
         }
     }
 </script>
+<style>
+    .cardsTable{
+        display:flex;
+    }
+</style>

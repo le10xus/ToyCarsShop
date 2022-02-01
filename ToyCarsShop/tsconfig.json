@@ -1,20 +1,24 @@
 {
+  //"extends": "@tsconfig/recommended/tsconfig.json",
   "compilerOptions": {
-    "target": "ES2015",
-    "module": "commonjs",
+    "target": "ES6",
+    "baseUrl": "src",
+    "preserveConstEnums": true,
+    "module": "CommonJS",
     "moduleResolution": "Node",
+    "outDir": "./built",
+    "allowJs": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "strictFunctionTypes": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "components": [ "src/components/*" ],
+      "carData": [ "src/components/CarData" ],
+      "@/*": [ "./*" ]
     }
   },
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Recommended"
-
 }

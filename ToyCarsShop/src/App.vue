@@ -4,7 +4,7 @@
 </template>
 
 <script>
-    import CarData from './components/CarData'
+    import CarData from './components/CarData.vue';
 export default {
   name: 'App',
   components: {

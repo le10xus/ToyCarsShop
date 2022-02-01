@@ -23,10 +23,23 @@ namespace ToyCarsShop
         }
 
         public IConfiguration Configuration { get; }
+        readonly string AllowSpecificOrigins = "_allowSpecificOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options=> {
+                options.AddPolicy(name: AllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder
+                                      .WithOrigins("https://localhost:44321", "https://localhost:44357")
+                                      .AllowAnyMethod()
+                                      .AllowCredentials()
+                                      .AllowAnyHeader();
+                                  });
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ToyCarsShop", Version = "v1" });
@@ -48,6 +61,8 @@ namespace ToyCarsShop
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(AllowSpecificOrigins);
 
             app.UseAuthorization();
 
