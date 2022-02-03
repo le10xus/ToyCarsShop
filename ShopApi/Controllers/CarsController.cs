@@ -48,5 +48,12 @@ namespace ToyCarsShop.Controllers
             _carsRepository.CreateCar(car);
             return Ok();
         }
+
+        [HttpPost]
+        public ActionResult Update(Car car)
+        {
+            _carsRepository.UpdateCar(car);
+            return Ok();
+        }
     }
 }
