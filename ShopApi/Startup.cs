@@ -36,12 +36,14 @@ namespace ShopApi
                 options.AddPolicy(name: AllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.AllowAnyOrigin();
+                                      builder.AllowAnyOrigin()
+                                      .AllowAnyMethod()
+                                      .AllowAnyHeader();
                                   });
             });
 
             services.AddDbContext<CarsContext>(options =>
-options.UseInMemoryDatabase(Configuration.GetConnectionString("DBCarShop")));
+options.UseSqlServer(Configuration.GetConnectionString("DBToyCar"), b=> b.MigrationsAssembly("ShopApi")));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
