@@ -36,7 +36,7 @@ namespace ShopApi
                 options.AddPolicy(name: AllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.AllowAnyOrigin()
+                                      builder.WithOrigins(Configuration.GetSection("originHostWeb").Value)
                                       .AllowAnyMethod()
                                       .AllowAnyHeader();
                                   });
