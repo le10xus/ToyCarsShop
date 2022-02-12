@@ -19,31 +19,36 @@ namespace ShopApi
 {
     public class Startup
     {
-        readonly string AllowSpecificOrigins = "_allowSpecificOrigins";
+        private const string AllowSpecificOrigins = "_allowSpecificOrigins";
+        private const string OriginHostWebOptionName = "OriginHostWeb";
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private readonly IConfiguration _configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var originHosWebOptionValue = _configuration.GetSection(OriginHostWebOptionName).Value;
             services.AddCors(options =>
             {
-                options.AddPolicy(name: AllowSpecificOrigins,
-                                  builder =>
-                                  {
-                                      builder.WithOrigins(Configuration.GetSection("originHostWeb").Value)
-                                      .AllowAnyMethod()
-                                      .AllowAnyHeader();
-                                  });
+                options.AddPolicy(
+                    name: AllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins(originHosWebOptionValue)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    });
             });
 
             services.AddDbContext<CarsContext>(options =>
-options.UseSqlServer(Configuration.GetConnectionString("DBToyCar"), b=> b.MigrationsAssembly("ShopApi")));
+                options.UseSqlServer(
+                    _configuration.GetConnectionString("DBToyCar"),
+                    b=> b.MigrationsAssembly("ShopApi")));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
