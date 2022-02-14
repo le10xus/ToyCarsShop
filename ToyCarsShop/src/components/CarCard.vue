@@ -14,7 +14,7 @@
         </div>
         <button v-on:click="removeCar(carData.id)">del</button>
         <button v-on:click="showCard()">edit</button>
-        <edit-card ref="modal" :car-data="dataForEdit"></edit-card>
+        <edit-card ref="modal" :car-data="this.carData"></edit-card>
     </div>
 </template>
 
@@ -47,22 +47,23 @@
                 };
                 const headers = {
                     "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods":"*"
+                    "Access-Control-Allow-Methods": "*"
                 };
                 axios
-                    .delete('https://localhost:44357/api/Cars', { data, headers })
+                    .delete('https://localhost:44357/api/Cars/' + id)
                     .then(response => console.log("removed " + id))
                     .catch(error => {
                         console.log(error);
                     });
             },
             showCard: function () {
-                this.dataForEdit = {
-                    model: this.carData.modelName,
-                    color: this.color,
-                    type: this.carType,
-                    price: this.carData.price
-                };
+                //this.dataForEdit = {
+                //    id: this.carData.Id
+                //    model: this.carData.modelName,
+                //    color: this.color,
+                //    type: this.carType,
+                //    price: this.carData.price
+                //};
                 this.$refs.modal.showCard = true;
             }
         }

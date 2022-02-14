@@ -25,4 +25,10 @@ function getColorById(colorId) {
     return getKeyByValue(ColorEnum, colorId);
 }
 
-export default { getKeyByValue, getCarTypeById, getColorById };
+export default {
+    getKeyByValue,
+    getCarTypeById,
+    getColorById,
+    CarTypeEnum,
+    ColorEnum
+};

@@ -7,7 +7,8 @@
         </button>
         <div class="cardsTable">
             <div v-for="car in cars">
-                <CarCard :car-data="car" />
+                <!--<CarCard :car-data="car" />-->
+                <EditCard :car-data="car"/>
             </div>
         </div>
     </div>
@@ -16,10 +17,12 @@
 <script>
     import axios from 'axios';
     import CarCard from './CarCard.vue';
+    import EditCard from './EditCard.vue';
     export default {
         name: "CarData",
         components: { 
-            CarCard
+            CarCard,
+            EditCard
         },
         data() {
             return {

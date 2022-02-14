@@ -1,28 +1,38 @@
 ﻿<template>
-    <div v-if="showCard" class="cardShadow" @click.self="closeCard">
-        <div class="cardBlock">
-            <div>
-                Model:
-            </div>
-            <input v-model="carData.model" />
-            <div>
-                Color:
-            </div>
-            <input v-model="carData.color" />
-            <div>
-                Type:
-            </div>
-            <input v-model="carData.type" />
-            <div>
-                Price:
-            </div>
-            <input v-model="carData.price" />
-            <div class="cardFooter">
-                <button v-on:click="saveCar(data)">save</button>
-                <button v-on:click="()=>{this.showCard = false}">cancel</button>
+    <!--<div v-if="showCard" class="cardShadow" @click.self="closeCard">-->
+    <div class="cardBlock">
+        <div>
+            Model:
+        </div>
+        <input v-model="carData.modelName" :disabled="editCard === false" />
+        <div>
+            Color:
+        </div>
+        <!--<input v-model="color" disabled="editCard === false" />-->
+        <select class="selectItem" id="carColorList" :disabled="editCard === false">
+            <option v-for="(index, color) in colorList" :selected="carColor === color" :value="index">{{color}}</option>
+        </select>
+        <div>
+            Type:
+        </div>
+        <select class="selectItem" id="carTypesList" :disabled="editCard === false">
+            <option v-for="(index, type) in typeList" :selected="carType === type" :value="index">{{type}}</option>
+        </select>
+
+        <div>
+            Price:
+        </div>
+        <input v-model="carData.price" :disabled="editCard === false" />
+
+        <div class="cardFooter">
+            <button v-if="!editCard" class="footerButton editButton" v-on:click="()=>{this.editCard = true}">edit</button>
+            <div v-if="editCard">
+                <button class="footerButton" v-on:click="saveCar(data)">save</button>
+                <button class="footerButton" v-on:click="()=>{this.editCard = false}">cancel</button>
             </div>
         </div>
     </div>
+    <!--</div>-->
 </template>
 
 <script>
@@ -33,14 +43,26 @@
         props: { 'carData': Object },
         data() {
             return {
-                showCard: false
+                editCard: false,
+                carColor: '',
+                carType: '',
+                typeList: {},
+                colorList: {},
+                type: '',
+                index: ''
             }
         },
+        created() {
+            this.typeList = helper.CarTypeEnum;
+            this.colorList = helper.ColorEnum;
+        },
         mounted() {
+            this.carColor = helper.getColorById(this.carData.color);
+            this.carType = helper.getCarTypeById(this.carData.type);
         },
         methods: {
             closeCard: function () {
-                this.showCard = false
+                this.editCard = false
             },
             saveCar: function () {
                 const data = {
@@ -64,12 +86,13 @@
         display: table;
         height: auto;
         width: auto;
-        border: solid blue;
+        border: solid lightgray;
         border-radius: 5px;
         padding: 10px;
         margin: 10px;
-        background:white;
+        background: white;
     }
+
     .cardShadow {
         position: absolute;
         top: 0;
@@ -79,7 +102,24 @@
         background: rgba(0, 0, 0, 0.39);
     }
 
-    .input{
-        width:100px;
+    .input {
+        width: 100px;
+    }
+
+    .selectItem {
+        width: 100%;
+        height: 25px;
+    }
+
+    .footerButton {
+        margin: 5px;
+        border-radius: 10px;
+        padding: 5px;
+        border: none;
+        background: lightgray;
+    }
+
+    .editButton {
+        float: right;
     }
 </style>
