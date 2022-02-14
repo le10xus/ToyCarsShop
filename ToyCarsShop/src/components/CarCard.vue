@@ -13,21 +13,27 @@
             Price: {{carData.price}}
         </div>
         <button v-on:click="removeCar(carData.id)">del</button>
-        <button v-on:click="editCar(carData.id)">edit</button>
+        <button v-on:click="showCard()">edit</button>
+        <edit-card ref="modal" :car-data="dataForEdit"></edit-card>
     </div>
 </template>
 
 <script>
     import axios from 'axios';
+    import EditCard from './EditCard.vue'
     import helper from './helper/helper.js';
     export default {
         name: 'CarData',
+        components: {
+            EditCard
+        },
         props: { 'carData': Object },
         data() {
             return {
                 cars: [],
                 color: '',
-                carType: ''
+                carType: '',
+                dataForEdit: {}
             }
         },
         mounted() {
@@ -50,18 +56,19 @@
                         console.log(error);
                     });
             },
-            editCar: function () {
-                axios
-                    .delete('https://localhost:44357/api/Cars', { data, headers })
-                    .then(response => console.log("removed " + id))
-                    .catch(error => {
-                        console.log(error);
-                    });
+            showCard: function () {
+                this.dataForEdit = {
+                    model: this.carData.modelName,
+                    color: this.color,
+                    type: this.carType,
+                    price: this.carData.price
+                };
+                this.$refs.modal.showCard = true;
             }
         }
     }
 </script>
-<style>
+<style scoped>
     .cardBlock {
         display: table;
         height: auto;

@@ -33,9 +33,8 @@ namespace ToyCarsShop
                                   builder =>
                                   {
                                       builder
-                                      .WithOrigins("https://localhost:44321", "https://localhost:44357")
+                                      .AllowAnyOrigin()
                                       .AllowAnyMethod()
-                                      .AllowCredentials()
                                       .AllowAnyHeader();
                                   });
             });
