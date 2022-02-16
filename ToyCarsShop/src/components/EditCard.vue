@@ -57,8 +57,8 @@
             this.colorList = helper.ColorEnum;
         },
         mounted() {
-            this.carColor = helper.getColorById(this.carData.color);
-            this.carType = helper.getCarTypeById(this.carData.type);
+            this.carColor = helper.getColorById(this.carData.colorId);
+            this.carType = helper.getCarTypeById(this.carData.typeId);
         },
         methods: {
             closeCard: function () {

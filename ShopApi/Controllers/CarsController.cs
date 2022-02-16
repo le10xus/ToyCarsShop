@@ -21,14 +21,14 @@ namespace ShopApi.Controllers
             _context = context;
         }
 
-        // GET: api/Cars1
+        // GET: api/Cars
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Car>>> GetCars()
         {
             return await _context.Cars.ToListAsync();
         }
 
-        // GET: api/Cars1/5
+        // GET: api/Cars/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Car>> GetCar(int id)
         {
@@ -42,7 +42,7 @@ namespace ShopApi.Controllers
             return car;
         }
 
-        // PUT: api/Cars1/5
+        // PUT: api/Cars/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCar(int id, Car car)
@@ -73,7 +73,7 @@ namespace ShopApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Cars1
+        // POST: api/Cars
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Car>> PostCar(Car car)
@@ -84,7 +84,7 @@ namespace ShopApi.Controllers
             return CreatedAtAction("GetCar", new { id = car.Id }, car);
         }
 
-        // DELETE: api/Cars1/5
+        // DELETE: api/Cars/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCar(int id)
         {

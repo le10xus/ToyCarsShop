@@ -14,5 +14,7 @@ namespace ToyCarsShop.Infrastructure.Data
         {
         }
         public DbSet<Car> Cars { get; set; }
+        public DbSet<CarColor> CarColor { get; set; }
+        public DbSet<CarType> CarType { get; set; }
     }
 }
