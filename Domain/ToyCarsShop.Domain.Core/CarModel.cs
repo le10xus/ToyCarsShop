@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ToyCarsShop.Domain.Core
 {
-    public class Model
+    public class CarModel
     {
         [Key]
         public int ModelId { get; set; }

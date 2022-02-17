@@ -8,7 +8,7 @@ namespace ToyCarsShop.Domain.Core
         public int Id { get; set; }
         public int ModelId { get; set; }
         [ForeignKey("ModelId")]
-        public Model Model { get; set; }
+        public CarModel CarModel { get; set; }
         public int Price { get; set; }
         public int ColorId { get; set; }
         [ForeignKey("ColorId")]
