@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShopApi.Models;
 using ToyCarsShop.Domain.Core;
 using ToyCarsShop.Infrastructure.Data;
 
@@ -23,9 +24,27 @@ namespace ShopApi.Controllers
 
         // GET: api/Cars
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Car>>> GetCars()
+        public async Task<ActionResult<IEnumerable<CarViewModel>>> GetCars()
         {
-            return await _context.Cars.ToListAsync();
+            var cars = _context.Cars;
+            var carTypes = _context.CarType;
+            var colors = _context.CarColor;
+            var models = _context.CarModel;
+
+            var viewModel = from car in cars
+                            join type in carTypes on car.TypeId equals type.TypeId
+                            join color in colors on car.ColorId equals color.ColorId
+                            join carModel in models on car.ModelId equals carModel.ModelId
+                            select new CarViewModel
+                            {
+                                Id = car.Id,
+                                CarModel = carModel.ModelName,
+                                Price = car.Price,
+                                ColorId = car.ColorId,
+                                TypeId = car.TypeId
+                            };
+
+            return await viewModel.ToListAsync();
         }
 
         // GET: api/Cars/5
