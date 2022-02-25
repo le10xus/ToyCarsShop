@@ -6,7 +6,7 @@ namespace ToyCarsShop.Domain.Interface
 {
     public interface ICarsRepository
     {
-        IEnumerable<Car> GetAllCars();
+        IEnumerable<CarViewModel> GetAllCars();
         Car GetCar(int id);
         void CreateCar(Car car);
         void DeleteCar(int id);

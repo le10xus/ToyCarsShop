@@ -1,16 +1,16 @@
 ﻿const CarTypeEnum = {
-    Sedan: 0,
-    Jeep: 1,
-    Bus: 2,
-    Van: 3
+    Sedan: 1,
+    Jeep: 2,
+    Bus: 3,
+    Van: 4
 };
 
 const ColorEnum = {
-    Black: 0,
-    White: 1,
-    Red: 2,
-    Blue: 3,
-    Gray: 4
+    Black: 1,
+    White: 2,
+    Red: 3,
+    Blue: 4,
+    Gray: 5
 };
 
 function getKeyByValue(object, value) {

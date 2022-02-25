@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using ToyCarsShop.Domain.Core;
 using ToyCarsShop.Domain.Interface;
 
@@ -28,9 +30,28 @@ namespace ToyCarsShop.Infrastructure.Data
             }
         }
 
-        public IEnumerable<Car> GetAllCars()
+
+        public IEnumerable<CarViewModel> GetAllCars()
         {
-            return dbContext.Cars;
+            var cars = dbContext.Cars;
+            var carTypes = dbContext.CarType;
+            var colors = dbContext.CarColor;
+            var models = dbContext.CarModel;
+
+            var viewModel = cars
+                .Include(c => c.CarModel)
+                .Include(c => c.Type)
+                .Include(c => c.Color)
+                .Select(x => new CarViewModel()
+                {
+                    Id = x.Id,
+                    CarModel = x.CarModel.ModelName,
+                    Price = x.Price,
+                    Color = x.Color.ColorName,
+                    Type = x.Type.TypeName
+                });
+
+            return viewModel;
         }
 
         public Car GetCar(int id)

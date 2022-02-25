@@ -42,13 +42,6 @@
         },
         methods: {
             removeCar: function (id) {
-                const data = {
-                    id
-                };
-                const headers = {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "*"
-                };
                 axios
                     .delete('https://localhost:44357/api/Cars/' + id)
                     .then(response => console.log("removed " + id))
@@ -57,13 +50,6 @@
                     });
             },
             showCard: function () {
-                //this.dataForEdit = {
-                //    id: this.carData.Id
-                //    model: this.carData.modelName,
-                //    color: this.color,
-                //    type: this.carType,
-                //    price: this.carData.price
-                //};
                 this.$refs.modal.showCard = true;
             }
         }

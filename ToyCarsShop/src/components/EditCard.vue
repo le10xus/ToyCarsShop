@@ -1,30 +1,30 @@
 ﻿<template>
-    <!--<div v-if="showCard" class="cardShadow" @click.self="closeCard">-->
     <div class="cardBlock">
         <div>
             Model:
         </div>
-        <input v-model="carData.modelName" :disabled="editCard === false" />
+        <input v-model="carData.carModel" :readonly="editCard === false" />
         <div>
             Color:
         </div>
-        <!--<input v-model="color" disabled="editCard === false" />-->
-        <select class="selectItem" id="carColorList" :disabled="editCard === false">
-            <option v-for="(index, color) in colorList" :selected="carColor === color" :value="index">{{color}}</option>
+        <select v-if="editCard" class="selectItem" id="carColorList">
+            <option v-for="(index, color) in colorList" :selected="carColor === index.colorName" :value="index.colorId">{{index.colorName}}</option>
         </select>
+        <input v-else v-model="carColor" readonly/>
         <div>
             Type:
         </div>
-        <select class="selectItem" id="carTypesList" :disabled="editCard === false">
-            <option v-for="(index, type) in typeList" :selected="carType === type" :value="index">{{type}}</option>
+        <select v-if="editCard" class="selectItem" id="carTypesList">
+            <option v-for="(index, type) in typeList" :selected="carType === index.typeName" :value="index.typeId">{{index.typeName}}</option>
         </select>
-
+        <input v-else v-model="carType" readonly/>
         <div>
             Price:
         </div>
-        <input v-model="carData.price" :disabled="editCard === false" />
+        <input v-model="carData.price" :readonly="editCard === false" />
 
         <div class="cardFooter">
+            <button v-if="!editCard" class="footerButton viewButton" v-on:click="()=>{}">view</button>
             <button v-if="!editCard" class="footerButton editButton" v-on:click="()=>{this.editCard = true}">edit</button>
             <div v-if="editCard">
                 <button class="footerButton" v-on:click="saveCar(data)">save</button>
@@ -32,7 +32,6 @@
             </div>
         </div>
     </div>
-    <!--</div>-->
 </template>
 
 <script>
@@ -40,40 +39,50 @@
     import helper from './helper/helper.js';
     export default {
         name: 'EditCard',
-        props: { 'carData': Object },
+        props: {
+            'carData': Object,
+            'typeList': Array,
+            'colorList': Array
+        },
         data() {
             return {
                 editCard: false,
                 carColor: '',
                 carType: '',
-                typeList: {},
-                colorList: {},
                 type: '',
                 index: ''
             }
         },
         created() {
-            this.typeList = helper.CarTypeEnum;
-            this.colorList = helper.ColorEnum;
         },
         mounted() {
-            this.carColor = helper.getColorById(this.carData.colorId);
-            this.carType = helper.getCarTypeById(this.carData.typeId);
+            this.carColor = this.carData.color;
+            this.carType = this.carData.type;
         },
         methods: {
             closeCard: function () {
                 this.editCard = false
             },
+            getCar: function () {
+                axios
+                    .get('https://localhost:44357/api/Cars/' + this.carData.id)
+                    .then(response => console.log(response))
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
+
             saveCar: function () {
                 const data = {
-                    modelName: this.carData.model,
-                    color: this.carData.color,
-                    type: this.carData.type,
+                    id: this.carData.id,
+                    carModel: this.carData.carModel,
+                    color: this.carData.colorId,
+                    type: this.carData.typeId,
                     price: this.carData.price
                 };
                 axios
-                    .post('https://localhost:44357/api/Cars', data)
-                    .then(response => console.log("update " + id))
+                    .put('https://localhost:44357/api/Cars/' + data.id, data)
+                    .then(response => {console.log("update " + id)})
                     .catch(error => {
                         console.log(error);
                     });
@@ -117,6 +126,10 @@
         padding: 5px;
         border: none;
         background: lightgray;
+    }
+
+    .viewButton{
+        float: left;
     }
 
     .editButton {
