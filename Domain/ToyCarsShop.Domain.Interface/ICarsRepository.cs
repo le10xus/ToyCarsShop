@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ToyCarsShop.Domain.Core;
 
 namespace ToyCarsShop.Domain.Interface
@@ -10,6 +11,6 @@ namespace ToyCarsShop.Domain.Interface
         Car GetCar(int id);
         void CreateCar(Car car);
         void DeleteCar(int id);
-        void UpdateCar(Car car);
+        Task<Car> UpdateCar(CarViewModel car);
     }
 }

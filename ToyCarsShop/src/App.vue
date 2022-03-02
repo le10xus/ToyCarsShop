@@ -1,5 +1,4 @@
 <template>
-    data in app:
     <CarData/>
 </template>
 

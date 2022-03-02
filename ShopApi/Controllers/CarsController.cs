@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ShopApi.Models;
 using ToyCarsShop.Domain.Core;
+using ToyCarsShop.Domain.Interface;
 using ToyCarsShop.Infrastructure.Data;
 
 namespace ShopApi.Controllers
@@ -16,35 +16,18 @@ namespace ShopApi.Controllers
     public class CarsController : ControllerBase
     {
         private readonly CarsContext _context;
-
-        public CarsController(CarsContext context)
+        private ICarsRepository _carsRepository { get; set; }
+        public CarsController(CarsContext context, ICarsRepository carsRepository)
         {
+            _carsRepository = carsRepository;
             _context = context;
         }
 
         // GET: api/Cars
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CarViewModel>>> GetCars()
+        public ActionResult<IEnumerable<CarViewModel>> GetCars()
         {
-            var cars = _context.Cars;
-            var carTypes = _context.CarType;
-            var colors = _context.CarColor;
-            var models = _context.CarModel;
-
-            var viewModel = from car in cars
-                            join type in carTypes on car.TypeId equals type.TypeId
-                            join color in colors on car.ColorId equals color.ColorId
-                            join carModel in models on car.ModelId equals carModel.ModelId
-                            select new CarViewModel
-                            {
-                                Id = car.Id,
-                                CarModel = carModel.ModelName,
-                                Price = car.Price,
-                                ColorId = car.ColorId,
-                                TypeId = car.TypeId
-                            };
-
-            return await viewModel.ToListAsync();
+            return _carsRepository.GetAllCars().ToList();
         }
 
         // GET: api/Cars/5
@@ -64,30 +47,14 @@ namespace ShopApi.Controllers
         // PUT: api/Cars/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCar(int id, Car car)
+        public async Task<IActionResult> PutCar(int id, CarViewModel car)
         {
             if (id != car.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(car).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CarExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _carsRepository.UpdateCar(car);
 
             return NoContent();
         }

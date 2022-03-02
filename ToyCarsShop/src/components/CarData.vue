@@ -2,11 +2,11 @@
     <div>
         <div v-if="!dataLoaded">Loading...</div>
         <div v-else="dataLoaded" class="cardsTable">
-            <div v-for="car in cars">
+            <div v-for="car in cars.data">
                 <EditCard 
                           :car-data="car"
-                          :type-list="types"
-                          :color-list="colors"/>
+                          :type-list="types.data"
+                          :color-list="colors.data"/>
             </div>
         </div>
     </div>
@@ -32,17 +32,22 @@
         },
         mounted() {
             this.getCars();
-            this.getColor();
-            this.getType();
         },
         methods: {
-            getCars: function () {
-                axios
-                    .get('https://localhost:44357/api/Cars')
-                    .then(response => {
-                        this.cars = response.data;
-                        this.dataLoaded = true;
-                    });
+            getCars: async function () {
+                try {
+                    this.cars = await axios
+                        .get('https://localhost:44357/api/Cars');
+                    this.colors = await axios
+                        .get('https://localhost:44357/api/CarColors/');
+                    this.types = await axios
+                        .get('https://localhost:44357/api/CarTypes/');
+
+                } catch (e) {
+                    console.log(e);
+                } finally {
+                    this.dataLoaded = true;
+                }
             },
             getColor: function () {
                 axios

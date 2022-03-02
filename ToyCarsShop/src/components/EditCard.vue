@@ -7,17 +7,17 @@
         <div>
             Color:
         </div>
-        <select v-if="editCard" class="selectItem" id="carColorList">
-            <option v-for="(index, color) in colorList" :selected="carColor === index.colorName" :value="index.colorId">{{index.colorName}}</option>
+        <select v-if="editCard" class="selectItem" id="carColorList" v-model="colorProperty.colorValue" name="colorValue">
+            <option v-for="(index, color) in colorList" v-bind:value="index.colorId">{{index.colorName}}</option>
         </select>
-        <input v-else v-model="carColor" readonly/>
+        <input v-else v-model="carColor" readonly />
         <div>
             Type:
         </div>
-        <select v-if="editCard" class="selectItem" id="carTypesList">
-            <option v-for="(index, type) in typeList" :selected="carType === index.typeName" :value="index.typeId">{{index.typeName}}</option>
+        <select v-if="editCard" class="selectItem" id="carTypesList" v-model="typeProperty.typeValue" name="typeValue">
+            <option v-for="(index, type) in typeList" v-bind:value="index.typeId">{{index.typeName}}</option>
         </select>
-        <input v-else v-model="carType" readonly/>
+        <input v-else v-model="carType" readonly />
         <div>
             Price:
         </div>
@@ -36,7 +36,6 @@
 
 <script>
     import axios from 'axios';
-    import helper from './helper/helper.js';
     export default {
         name: 'EditCard',
         props: {
@@ -46,6 +45,12 @@
         },
         data() {
             return {
+                colorProperty: {
+                    colorValue: ''
+                },
+                typeProperty: {
+                    typeValue: ''
+                },
                 editCard: false,
                 carColor: '',
                 carType: '',
@@ -53,11 +58,16 @@
                 index: ''
             }
         },
-        created() {
-        },
-        mounted() {
+        mounted() {            
             this.carColor = this.carData.color;
             this.carType = this.carData.type;
+
+            this.colorProperty.colorValue = this.colorList.find(x => x.colorName === this.carColor)?.colorId;
+            this.typeProperty.typeValue = this.typeList.find(x => x.typeName === this.carType)?.typeId;
+        },
+        computed() {
+            //this.colorProperty.colorName = this.colorList.find(x => x.colorId === this.colorProperty.colorValue)?.colorName;
+            //this.typeProperty.typeName = this.typeList.find(x => x.typeId === this.typeProperty.typeValue)?.typeName;
         },
         methods: {
             closeCard: function () {
@@ -76,10 +86,11 @@
                 const data = {
                     id: this.carData.id,
                     carModel: this.carData.carModel,
-                    color: this.carData.colorId,
-                    type: this.carData.typeId,
+                    color: this.colorList.find(x => x.colorId === this.colorProperty.colorValue)?.colorName,
+                    type: this.typeList.find(x => x.typeId === this.typeProperty.typeValue)?.typeName,
                     price: this.carData.price
                 };
+
                 axios
                     .put('https://localhost:44357/api/Cars/' + data.id, data)
                     .then(response => {console.log("update " + id)})
