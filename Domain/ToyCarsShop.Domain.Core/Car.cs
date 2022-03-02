@@ -1,30 +1,20 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToyCarsShop.Domain.Core
 {
-    public enum CarType
-    {
-        Sedan,
-        Jeep,
-        Bus,
-        Van
-    }
-
-    public enum Color
-    {
-        Black,
-        White,
-        Red,
-        Blue,
-        Gray
-    }
-
     public class Car
     {
         public int Id { get; set; }
-        public string ModelName { get; set; }
+        public int ModelId { get; set; }
+        [ForeignKey("ModelId")]
+        public CarModel CarModel { get; set; }
         public int Price { get; set; }
-        public Color Color { get; set; }
+        public int ColorId { get; set; }
+        [ForeignKey("ColorId")]
+        public CarColor Color { get; set; }
+        public int TypeId { get; set; }
+        [ForeignKey("TypeId")]
         public CarType Type { get; set; }
     }
 }
